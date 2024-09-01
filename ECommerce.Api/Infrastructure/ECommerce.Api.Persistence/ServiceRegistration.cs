@@ -1,11 +1,9 @@
 ﻿using ECommerce.Api.Application.Abstraction;
 using ECommerce.Api.Persistence.Concretes;
+using ECommerce.Api.Persistence.Configurations;
+using ECommerce.Api.Persistence.Context;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Api.Persistence
 {
@@ -13,6 +11,10 @@ namespace ECommerce.Api.Persistence
     {
         public static void PersistenceServiceRegistrations(this IServiceCollection services)
         {
+            services.AddDbContext<ECommerceApiDbContext>(options =>
+            {
+                options.UseNpgsql(Configuration.ConnectionString);
+            });
             services.AddScoped<IProductService, ProductService>();
         }
     }
