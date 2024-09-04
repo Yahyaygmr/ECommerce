@@ -54,3 +54,4 @@ namespace ECommerce.Api.Persistence.Repositories
             return query;
         }
     }
+}
