@@ -1,5 +1,4 @@
-﻿using ECommerce.Api.Application.Abstraction;
-using ECommerce.Api.Persistence.Concretes;
+﻿
 using ECommerce.Api.Persistence.Configurations;
 using ECommerce.Api.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +14,7 @@ namespace ECommerce.Api.Persistence
             {
                 options.UseNpgsql(Configuration.ConnectionString);
             });
-            services.AddScoped<IProductService, ProductService>();
+           
         }
     }
 }
