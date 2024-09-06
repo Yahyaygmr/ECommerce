@@ -4,6 +4,7 @@ using ECommerce.Api.Domain.Entities;
 using ECommerce.Api.WebAPI.Models.ProductViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace ECommerce.Api.WebAPI.Controllers
 {
@@ -44,7 +45,7 @@ namespace ECommerce.Api.WebAPI.Controllers
             };
             await _productWriteRepository.AddAsync(product);
             await _productWriteRepository.SaveAsync();
-            return Ok();
+            return StatusCode((int)HttpStatusCode.Created);
         }
         [HttpPut]
         public async Task<IActionResult> Put(UpdateProductViewModel model)
