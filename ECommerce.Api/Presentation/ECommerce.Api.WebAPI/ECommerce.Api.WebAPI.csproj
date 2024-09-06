@@ -25,4 +25,8 @@
     <ProjectReference Include="..\..\Infrastructure\ECommerce.Api.Persistence\ECommerce.Api.Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 </Project>

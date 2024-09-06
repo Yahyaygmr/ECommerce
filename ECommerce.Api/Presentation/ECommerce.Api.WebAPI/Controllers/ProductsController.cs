@@ -1,8 +1,7 @@
 ﻿
 using ECommerce.Api.Application.Repositories.ProductRepositories;
+using ECommerce.Api.Application.ViewModels.ProductViewModels;
 using ECommerce.Api.Domain.Entities;
-using ECommerce.Api.WebAPI.Models.ProductViewModels;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 

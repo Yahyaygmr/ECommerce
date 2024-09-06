@@ -1,4 +1,10 @@
-﻿namespace ECommerce.Api.WebAPI.Models.ProductViewModels
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ECommerce.Api.Application.ViewModels.ProductViewModels
 {
     public class UpdateProductViewModel
     {

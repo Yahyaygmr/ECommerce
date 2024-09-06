@@ -1,5 +1,6 @@
 ﻿using ECommerce.Client.WebUI.Areas.Admin.Models.ProductModels;
 using ECommerce.Client.WebUI.Custom.CustomHttpClient;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -33,14 +34,52 @@ namespace ECommerce.Client.WebUI.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateProductModel model)
         {
-
-            RequestParameters param = new()
+            RequestParameters param = new() { controller = "Products" };
+            try
             {
-                controller = "Products"
-            };
-            var returnvalue = await _customHttpClientService.Post(param, model);
+                var returnvalue = await _customHttpClientService.Post(param, model);
+                return RedirectToAction("Index");
+            }
+            catch (HttpRequestException ex)
+            {
 
-            return RedirectToAction("Index");
+                // Sunucudan gelen hatayı JSON formatında yakalayıp işleme
+                var responseContent = ex.Message;
+
+                // Eğer sunucudan dönen hata mesajı JSON formatında ise ve detayları içeriyorsa:
+                // Örnek: [{"key":"Price","value":["Fiyat bilgisi negatif olamaz"]},{"key":"Stock","value":["Stok bilgisi negatif olamaz"]}]
+                try
+                {
+                    // Hata mesajı JSON değilse, sadece JSON kısmını ayıklıyoruz.
+                    var jsonStartIndex = responseContent.IndexOf('[');
+                    if (jsonStartIndex >= 0)
+                    {
+                        var jsonContent = responseContent.Substring(jsonStartIndex);
+
+                        var errorList = JsonConvert.DeserializeObject<List<ErrorDetail>>(jsonContent);
+
+                        if (errorList != null)
+                        {
+                            foreach (var error in errorList)
+                            {
+                                foreach (var message in error.Value)
+                                {
+                                    ModelState.AddModelError(error.Key, message);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, responseContent);
+                    }
+                }
+                catch (Exception)
+                {
+                    ModelState.AddModelError(string.Empty, "Beklenmeyen bir hata oluştu: " + responseContent);
+                }
+            }
+            return View(model);
         }
         [HttpGet]
         public async Task<IActionResult> Update(string id)
@@ -48,7 +87,7 @@ namespace ECommerce.Client.WebUI.Areas.Admin.Controllers
             RequestParameters param = new()
             {
                 controller = "Products",
-                action ="getbyid"
+                action = "getbyid"
             };
             var values = await _customHttpClientService.Get<ResultProductModel>(param, id);
 
@@ -84,4 +123,9 @@ namespace ECommerce.Client.WebUI.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
     }
+}
+public class ErrorDetail
+{
+    public string Key { get; set; }
+    public List<string> Value { get; set; }
 }
