@@ -1,4 +1,6 @@
-﻿@{
+﻿@model List<ResultProductModel>
+
+@{
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
@@ -10,30 +12,26 @@
     <thead>
         <tr>
             <th>#</th>
-            <th>1</th>
-            <th>2</th>
-            <th>3</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>CreatedDate</th>
+            <th>UpdatedDate</th>
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <th>#</th>
-            <th>1</th>
-            <th>2</th>
-            <th>3</th>
-        </tr>
-        <tr>
-            <th>#</th>
-            <th>1</th>
-            <th>2</th>
-            <th>3</th>
-        </tr>
-        <tr>
-            <th>#</th>
-            <th>1</th>
-            <th>2</th>
-            <th>3</th>
-        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th>@item.Id</th>
+                <th>@item.Name</th>
+                <th>@item.Price</th>
+                <th>@item.Stock</th>
+                <th>@item.CreatedDate</th>
+                <th>@item.UpdatedDate</th>
+            </tr>
+
+        }
+      
     </tbody>
 </table>
-

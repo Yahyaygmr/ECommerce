@@ -1,2 +1,32 @@
-﻿
-<h1>Alertify Component</h1>
+﻿@* 
+<script>
+
+    alertify.set('notifier', 'position', 'top-right');
+    alertify.success('Current position : ' + alertify.get('notifier', 'position'));
+
+</script> *@
+
+@* <script type="text/javascript">
+    toastr.options = {
+        "closeButton": true,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "timeOut": "5000"
+    };
+
+    toastr.success("Toastr Test");
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <text>
+                toastr.success('@TempData["SuccessMessage"]');
+        </text>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <text>
+                toastr.error('@TempData["ErrorMessage"]');
+        </text>
+    }
+</script> *@
