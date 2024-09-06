@@ -8,6 +8,7 @@ namespace ECommerce.Client.WebUI.Custom.CustomHttpClient
         public string? action { get; set; }
         public string? baseUrl { get; set; }
         public string? fullEndpoint { get; set; }
+        public string? querystring { get; set; }
         //public HttpHeaders? headers { get; set; }
     }
 }

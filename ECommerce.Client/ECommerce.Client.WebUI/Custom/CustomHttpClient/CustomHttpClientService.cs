@@ -28,7 +28,7 @@ namespace ECommerce.Client.WebUI.Custom.CustomHttpClient
             if (param.fullEndpoint != null)
                 url = param.fullEndpoint;
             else
-                url = $"{CreateUrl(param)}{(id != null ? $"/{id}" : "")}";
+                url = $"{CreateUrl(param)}{(id != null ? $"/{id}" : "")}{(param.querystring != null ? $"?{param.querystring}" : "")}";
 
             HttpClient client = _httpClientFactory.CreateClient();
             HttpResponseMessage responseMessage = await client.GetAsync(url);
@@ -52,7 +52,7 @@ namespace ECommerce.Client.WebUI.Custom.CustomHttpClient
             if (param.fullEndpoint != null)
                 url = param.fullEndpoint;
             else
-                url = CreateUrl(param);
+                url = $"{CreateUrl(param)}{(param.querystring != null ? $"?{param.querystring}" : "")}";
             HttpClient client = _httpClientFactory.CreateClient();
             var jsonData = JsonConvert.SerializeObject(body);
             StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
@@ -74,7 +74,7 @@ namespace ECommerce.Client.WebUI.Custom.CustomHttpClient
             if (param.fullEndpoint != null)
                 url = param.fullEndpoint;
             else
-                url = CreateUrl(param);
+                url = $"{CreateUrl(param)}{(param.querystring != null ? $"?{param.querystring}" : "")}";
             HttpClient client = _httpClientFactory.CreateClient();
             var jsonData = JsonConvert.SerializeObject(body);
             StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
@@ -96,7 +96,7 @@ namespace ECommerce.Client.WebUI.Custom.CustomHttpClient
             if (param.fullEndpoint != null)
                 url = param.fullEndpoint;
             else
-                url = $"{CreateUrl(param)}{(id != null ? $"/{id}" : "")}";
+                url = $"{CreateUrl(param)}{(id != null ? $"/{id}" : "")}{(param.querystring != null ? $"?{param.querystring}" : "")}";
          
             HttpClient client = _httpClientFactory.CreateClient();
             var responseMessage = await client.DeleteAsync(url);

@@ -17,13 +17,14 @@ namespace ECommerce.Client.WebUI.Areas.Admin.Controllers
             _customHttpClientService = customHttpClientService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? size=5, int? page=0)
         {
             RequestParameters param = new()
             {
                 controller = "Products",
+                querystring = $"page={page}&size={size}"
             };
-            var values = await _customHttpClientService.Get<List<ResultProductModel>>(param);
+            var values = await _customHttpClientService.Get<GetProductsWithPagination>(param);
             return View(values);
         }
         [HttpGet]
