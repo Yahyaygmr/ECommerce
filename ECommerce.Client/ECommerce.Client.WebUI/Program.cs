@@ -1,8 +1,11 @@
+using ECommerce.Client.WebUI.Custom.CustomHttpClient;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
+builder.Services.AddScoped<CustomHttpClientService>();
 
 var app = builder.Build();
 
