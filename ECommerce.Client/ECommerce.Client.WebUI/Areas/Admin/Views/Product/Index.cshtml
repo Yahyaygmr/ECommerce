@@ -44,7 +44,7 @@
         <tr class="bg-dark-light1">
 
           
-            <td colspan="4" style="text-align: right;" class="pt-3">Toplam Kayıt:  <strong>@Model.TotalCount </strong>/ Sayfa: <strong>@(Model.Page + 1) - @(Math.Ceiling((double)Model.TotalCount / (double)Model.Size))</strong></td>
+            <td colspan="3" style="text-align: left;" class="pt-3">Toplam Kayıt:  <strong>@Model.TotalCount </strong>/ Sayfa: <strong>@(Model.Page + 1) - @(Math.Ceiling((double)Model.TotalCount / (double)Model.Size))</strong></td>
             <td style="text-align: right;">
                 <select class="form-control" onchange="navigateToAction(this);">
                     <option value="">Seçiniz</option>
@@ -53,7 +53,7 @@
                     <option value="20">20</option>
                 </select>
             </td>
-            <td colspan="2" class="pt-3" style="color:black; font-size:17px;">
+            <td colspan="3" class="pt-3" style="color:black; font-size:17px;">
             
 @* 
                 <a href="#" class="btn">
@@ -64,14 +64,14 @@
                     <a class="btn" href="/Admin/Product/Index?size=@Model.Size&page=@(Model.Page - 1)">
                         <span class="material-symbols-outlined">
                             arrow_back_ios
-                        </span>
+                        </span>Önceki Sayfa
                     </a>
                 }
 
                 @if (Model.Page < Math.Ceiling((double)Model.TotalCount / (double)Model.Size)-1)
                 {
                     <a class="btn" href="/Admin/Product/Index?size=@Model.Size&page=@(Model.Page + 1)">
-                        <span class="material-symbols-outlined">
+                        Sonraki Sayfa <span class="material-symbols-outlined">
                             arrow_forward_ios
                         </span>
                     </a>
@@ -82,7 +82,7 @@
     </tfoot>
 </table>
 <br />
-
+@await Component.InvokeAsync("FileUploadComponentPartial")
 <script>
     function navigateToAction(select) {
         var selectedValue = select.value;

@@ -1,0 +1,113 @@
+﻿<form id="fileUploadForm">
+    <div class="mb-3">
+        <label for="formFileMultiple" class="form-label">Multiple files input example</label>
+        <input class="form-control" type="file" id="formFileMultiple" multiple>
+    </div>
+    <button id="sendbutton" type="button" disabled class="btn btn-info">Dosyaları Kaydet</button>
+</form>
+
+<!-- Dosya isimlerini göstereceğimiz alan -->
+<ul id="fileList"></ul>
+
+<script>
+    const input = document.getElementById("formFileMultiple");
+    const fileList = document.getElementById("fileList");
+    const sendButton = document.getElementById("sendbutton");
+
+    // Sayfa yüklendiğinde buton devre dışı bırakılıyor
+    document.addEventListener("DOMContentLoaded", function () {
+        sendButton.disabled = true;
+    });
+
+    // Dosyalar değiştiğinde gerçekleşecek olay
+    input.addEventListener("change", function () {
+        // Listeyi temizle
+        fileList.innerHTML = "";
+
+        // Dosya seçili mi kontrol et
+        if (input.files.length > 0) {
+            // Seçilen dosyaları döngü ile al
+            for (let i = 0; i < input.files.length; i++) {
+                const li = document.createElement("li");
+                li.textContent = input.files[i].name;
+                fileList.appendChild(li);
+            }
+
+            // Dosya varsa butonu etkinleştir
+            sendButton.disabled = false;
+        } else {
+            // Dosya yoksa butonu devre dışı bırak
+            sendButton.disabled = true;
+        }
+    });
+
+    // Butona tıklandığında dosyaları gönder
+    sendButton.addEventListener("click", function () {
+        var formData = new FormData();
+
+        // Seçilen dosyaları formData'ya ekle
+        for (let i = 0; i < input.files.length; i++) {
+            formData.append("files", input.files[i]);
+        }
+
+        // API'ye POST isteği gönder
+        fetch('/Admin/Default/UploadFiles', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(result => {
+                alert("Dosyalar başarıyla yüklendi.");
+            })
+            .catch(error => {
+                alert("Dosyalar yüklenirken hata oluştu.");
+                console.error("Error:", error);
+            });
+    });
+</script>
+
+
+
+@* <form>
+    <div class="mb-3">
+  <label for="formFileMultiple" class="form-label">Multiple files input example</label>
+  <input class="form-control" type="file" id="formFileMultiple" multiple>
+</div>
+<buttton id="sendbutton" disabled class="btn btn-success">Dosyaları Kaydet</buttton>
+</form>
+
+<!-- Dosya isimlerini göstereceğimiz alan -->
+<ul id="fileList"></ul>
+
+<script>
+    const input = document.getElementById("formFileMultiple");
+    const fileList = document.getElementById("fileList");
+    const sendButton = document.getElementById("sendbutton");
+
+    // Sayfa yüklendiğinde buton devre dışı bırakılıyor
+    document.addEventListener("DOMContentLoaded", function () {
+        sendButton.disabled = true;
+    });
+
+    // Dosyalar değiştiğinde gerçekleşecek olay
+    input.addEventListener("change", function () {
+        // Listeyi temizle
+        fileList.innerHTML = "";
+
+        // Dosya seçili mi kontrol et
+        if (input.files.length > 0) {
+            // Seçilen dosyaları döngü ile al
+            for (let i = 0; i < input.files.length; i++) {
+                const li = document.createElement("li");
+                li.textContent = input.files[i].name;
+                fileList.appendChild(li);
+            }
+
+            // Dosya varsa butonu etkinleştir
+            sendButton.disabled = false;
+        } else {
+            // Dosya yoksa butonu devre dışı bırak
+            sendButton.disabled = true;
+        }
+    });
+</script> *@
