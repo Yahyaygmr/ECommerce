@@ -1,89 +1,11 @@
-﻿@model GetProductsWithPagination
-
+﻿
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
-    int count = 0;
 }
 
-<h3>Ürün Listesi</h3>
-<hr />
-<a href="/Admin/Default/Create" class="btn btn-outline-success">+ Ürün Ekle</a>
-<br />
-<table class="table table-hover table-striped">
-    <thead>
-        <tr>
-            @*  <th>#</th> *@
-            <th>Name</th>
-            <th>Price</th>
-            <th>Stock</th>
-            <th>CreatedDate</th>
-            <th>UpdatedDate</th>
-            <th>Sil</th>
-            <th>Güncelle</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Products)
-        {
-            count++;
-            <tr>
-                @*  <th>@item.Id</th> *@
-                <th>@item.Name</th>
-                <th>@item.Price</th>
-                <th>@item.Stock</th>
-                <th>@item.CreatedDate</th>
-                <th>@item.UpdatedDate</th>
-                <th><a>Sil</a></th>
-                <th><a>Güncelle</a></th>
-            </tr>
-        }
-    </tbody>
-    <tfoot>
-        <tr class="bg-dark-light1">
+<h1>Index</h1>
 
-            <td colspan="2"></td>
-            <td colspan="4" style="text-align: right;" class="pt-3">Toplam Kayıt:  <strong>@Model.TotalCount </strong>/ Sayfa: <strong>@(Model.Page + 1) - @(Math.Ceiling((double)Model.TotalCount / (double)Model.Size))</strong></td>
-            <td style="text-align: right;">
-                <select class="form-control" onchange="navigateToAction(this);">
-                    <option value="">Seçiniz</option>
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="20">20</option>
-                </select>
-            </td>
-            <td colspan="2" class="pt-3" style="color:black; font-size:17px;">
-            
-
-                <a href="#"><i class="fa fa-step-backward" style="margin-right: 10px;"></i></a>
-                @if (Model.Page > 0)
-                {
-                    <a href="/Admin/Default/Index?size=@Model.Size&page=@(Model.Page - 1)"><i class="fa fa-chevron-left" style="margin-right: 15px;"></i></a>
-                }
-
-                @if (Model.Page < Math.Ceiling((double)Model.TotalCount / (double)Model.Size)-1)
-                {
-                    <a href="/Admin/Default/Index?size=@Model.Size&page=@(Model.Page + 1)"><i class="fa fa-chevron-right" style="margin-right: 10px;"></i></a>
-                }
-                <a href="#"><i class="fa fa-step-forward"></i></a>
-            </td>
-        </tr>
-    </tfoot>
-</table>
-<br />
-<script>
-    function navigateToAction(select) {
-        var selectedValue = select.value;
-        if (selectedValue) {
-            // İstediğiniz controller, action ve parametreyi burada oluşturabilirsiniz.
-            var area = 'Admin';
-            var controller = 'Default';
-            var action = 'Index';
-            var param = selectedValue;
-
-            // URL'yi dinamik olarak oluştur ve yönlendir.
-            var url = '/' + area + '/' + controller + '/' + action + '?size=' + param;
-            window.location.href = url;
-        }
-    }
-</script>
+<span class="material-symbols-outlined">
+first_page
+</span>
