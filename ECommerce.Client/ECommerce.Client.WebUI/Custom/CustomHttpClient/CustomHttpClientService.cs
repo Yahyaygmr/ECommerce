@@ -1,6 +1,7 @@
 ﻿using ECommerce.Client.WebUI.Areas.Admin.Models.ProductModels;
 using Newtonsoft.Json;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 
 namespace ECommerce.Client.WebUI.Custom.CustomHttpClient
@@ -46,7 +47,7 @@ namespace ECommerce.Client.WebUI.Custom.CustomHttpClient
             }
 
         }
-        public async Task<HttpStatusCode> Post<T>(RequestParameters param, T body)
+        public async Task<HttpResponseMessage> Post<T>(RequestParameters param, T body)
         {
             string url = "";
             if (param.fullEndpoint != null)
@@ -59,7 +60,44 @@ namespace ECommerce.Client.WebUI.Custom.CustomHttpClient
             var responseMessage = await client.PostAsync(url, stringContent);
             if (responseMessage.IsSuccessStatusCode)
             {
-                return responseMessage.StatusCode;
+                return responseMessage;
+            }
+            else
+            {
+                // Eğer status code başarılı değilse, hata fırlat
+                string errorResponse = await responseMessage.Content.ReadAsStringAsync();
+                throw new HttpRequestException($"Request failed with status code {responseMessage.StatusCode}: {errorResponse}");
+            }
+        }
+        public async Task<HttpResponseMessage> PostData<T>(RequestParameters param, T body)
+        {
+            string url = "";
+            if (param.fullEndpoint != null)
+                url = param.fullEndpoint;
+            else
+                url = $"{CreateUrl(param)}{(param.querystring != null ? $"?{param.querystring}" : "")}";
+            HttpClient client = _httpClientFactory.CreateClient();
+            var jsonData = JsonConvert.SerializeObject(body);
+            StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
+            MultipartFormDataContent dataContent = new();
+            dataContent.Add(stringContent, "jsonData");
+
+            if (body is IEnumerable<IFormFile> files)
+            {
+                foreach (var file in files)
+                {
+                    if (file.Length > 0)
+                    {
+                        var streamContent = new StreamContent(file.OpenReadStream());
+                        streamContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType);
+                        dataContent.Add(streamContent, "files", file.FileName);
+                    }
+                }
+            }
+            var responseMessage = await client.PostAsync(url, dataContent);
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                return responseMessage;
             }
             else
             {

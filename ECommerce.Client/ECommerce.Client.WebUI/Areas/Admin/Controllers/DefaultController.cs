@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ECommerce.Client.WebUI.Custom.CustomHttpClient;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Client.WebUI.Areas.Admin.Controllers
 {
@@ -6,6 +7,13 @@ namespace ECommerce.Client.WebUI.Areas.Admin.Controllers
     [Route("Admin/{controller}/{action}/{id?}")]
     public class DefaultController : Controller
     {
+        private readonly CustomHttpClientService _customHttpClientService;
+
+        public DefaultController(CustomHttpClientService customHttpClientService)
+        {
+            _customHttpClientService = customHttpClientService;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -19,33 +27,40 @@ namespace ECommerce.Client.WebUI.Areas.Admin.Controllers
             }
 
             // API'ye dosyaları gönderme işlemi
-            using (var client = new HttpClient())
+
+            var content = files;
+
+            RequestParameters param = new()
             {
-                var content = new MultipartFormDataContent();
+                controller = "products",
+                action = "upload"
 
-                // Seçilen dosyaları döngüyle al ve API'ye ekle
-                foreach (var file in files)
-                {
-                    if (file.Length > 0)
-                    {
-                        var streamContent = new StreamContent(file.OpenReadStream());
-                        streamContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType);
-                        content.Add(streamContent, "files", file.FileName);
-                    }
-                }
+            };
+            var response = await _customHttpClientService.PostData(param, content);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    try
+            //    {
+            //        return Ok("Index");
+            //    }
+            //    catch (Exception ex)
+            //    {
 
-                // API endpoint URL'sini buraya yazın
-                var apiUrl = "https://api-endpoint-url.com/upload";
-                var response = await client.PostAsync(apiUrl, content);
+            //        throw new Exception(ex.Message);
+            //    }
 
-                if (response.IsSuccessStatusCode)
-                {
-                    return Ok("Files successfully uploaded.");
-                }
-                else
-                {
-                    return StatusCode((int)response.StatusCode, "Error uploading files to the API.");
-                }
+            //}
+            //else
+            //{
+            //    return StatusCode((int)response.StatusCode, "Error uploading files to the API.");
+            //}
+            if (response.IsSuccessStatusCode)
+            {
+                return Json(new { success = true });
+            }
+            else
+            {
+                return StatusCode((int)response.StatusCode, new { message = "Error uploading files to the API." });
             }
         }
 

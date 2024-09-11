@@ -1,4 +1,4 @@
-﻿<form id="fileUploadForm">
+﻿<form id="fileUploadForm" enctype="multipart/form-data">
     <div class="mb-3">
         <label for="formFileMultiple" class="form-label">Multiple files input example</label>
         <input class="form-control" type="file" id="formFileMultiple" multiple>
@@ -50,64 +50,27 @@
             formData.append("files", input.files[i]);
         }
 
-        // API'ye POST isteği gönder
         fetch('/Admin/Default/UploadFiles', {
             method: 'POST',
             body: formData
         })
-            .then(response => response.json())
-            .then(result => {
-                alert("Dosyalar başarıyla yüklendi.");
+            .then(response => {
+                if (response.ok) {
+                    alert("İşlem Başarılı !");
+                    // Başarıyla yüklendiğinde yönlendir
+                    window.location.href = '/Admin/Default/Index'; // Yönlendirme yapılacak URL
+                } else {
+                    return response.json().then(errorData => {
+                        // Hata varsa kullanıcıya bildirin
+                        alert("Error: " + "Bir hata oluştu !");
+                    });
+                }
             })
             .catch(error => {
-                alert("Dosyalar yüklenirken hata oluştu.");
-                console.error("Error:", error);
+                // Ağ hatası durumunda kullanıcıya bildirin
+                alert("An error occurred: " + "Bağlantı Hatası !");
             });
     });
 </script>
 
 
-
-@* <form>
-    <div class="mb-3">
-  <label for="formFileMultiple" class="form-label">Multiple files input example</label>
-  <input class="form-control" type="file" id="formFileMultiple" multiple>
-</div>
-<buttton id="sendbutton" disabled class="btn btn-success">Dosyaları Kaydet</buttton>
-</form>
-
-<!-- Dosya isimlerini göstereceğimiz alan -->
-<ul id="fileList"></ul>
-
-<script>
-    const input = document.getElementById("formFileMultiple");
-    const fileList = document.getElementById("fileList");
-    const sendButton = document.getElementById("sendbutton");
-
-    // Sayfa yüklendiğinde buton devre dışı bırakılıyor
-    document.addEventListener("DOMContentLoaded", function () {
-        sendButton.disabled = true;
-    });
-
-    // Dosyalar değiştiğinde gerçekleşecek olay
-    input.addEventListener("change", function () {
-        // Listeyi temizle
-        fileList.innerHTML = "";
-
-        // Dosya seçili mi kontrol et
-        if (input.files.length > 0) {
-            // Seçilen dosyaları döngü ile al
-            for (let i = 0; i < input.files.length; i++) {
-                const li = document.createElement("li");
-                li.textContent = input.files[i].name;
-                fileList.appendChild(li);
-            }
-
-            // Dosya varsa butonu etkinleştir
-            sendButton.disabled = false;
-        } else {
-            // Dosya yoksa butonu devre dışı bırak
-            sendButton.disabled = true;
-        }
-    });
-</script> *@
