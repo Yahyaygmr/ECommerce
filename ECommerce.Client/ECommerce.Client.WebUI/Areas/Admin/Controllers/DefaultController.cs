@@ -37,23 +37,7 @@ namespace ECommerce.Client.WebUI.Areas.Admin.Controllers
 
             };
             var response = await _customHttpClientService.PostData(param, content);
-            //if (response.IsSuccessStatusCode)
-            //{
-            //    try
-            //    {
-            //        return Ok("Index");
-            //    }
-            //    catch (Exception ex)
-            //    {
-
-            //        throw new Exception(ex.Message);
-            //    }
-
-            //}
-            //else
-            //{
-            //    return StatusCode((int)response.StatusCode, "Error uploading files to the API.");
-            //}
+           
             if (response.IsSuccessStatusCode)
             {
                 return Json(new { success = true });
