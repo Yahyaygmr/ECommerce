@@ -1,4 +1,5 @@
 ﻿using ECommerce.Api.Application.Services;
+using ECommerce.Api.Infrastructure.Operations;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -35,9 +36,29 @@ namespace ECommerce.Api.Infrastructure.Services
             }
         }
 
-        public async Task<string> FileRenameAsync(string fileName)
+        async Task<string> FileRenameAsync(string path, string fileName)
         {
-            return "";
+
+            string extension = Path.GetExtension(fileName);
+            string oldName = Path.GetFileNameWithoutExtension(fileName);
+            string newFileName = $"{NameOperation.CharacterRegulatory(oldName)}{extension}";
+
+            if (File.Exists($"{path}\\{newFileName}"))
+            {
+                int i = 1;
+                while (File.Exists($"{path}\\{newFileName}"))
+                {
+                    string tempNewFileName = $"{NameOperation.CharacterRegulatory(oldName)}({i}){extension}";
+                    newFileName = tempNewFileName;
+                    i++;
+                }
+
+                return newFileName;
+            }
+            else
+            {
+                return newFileName;
+            }
         }
 
         public async Task<List<(string filename, string path)>> UploadAsync(string path, IFormFileCollection files)
@@ -51,13 +72,13 @@ namespace ECommerce.Api.Infrastructure.Services
 
             foreach (IFormFile file in files)
             {
-                string fileNewName = await FileRenameAsync(file.FileName);
-               bool result = await CopyFileAsync($"{uploadPath}\\{fileNewName}", file);
+                string fileNewName = await FileRenameAsync(uploadPath, file.FileName);
+                bool result = await CopyFileAsync($"{uploadPath}\\{fileNewName}", file);
                 datas.Add((fileNewName, $"{uploadPath}\\{fileNewName}"));
                 results.Add(result);
             }
 
-            if(results.TrueForAll(result => result.Equals(true)))
+            if (results.TrueForAll(result => result.Equals(true)))
             {
                 return datas;
             }
@@ -68,3 +89,4 @@ namespace ECommerce.Api.Infrastructure.Services
         }
     }
 }
+
