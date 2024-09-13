@@ -10,4 +10,5 @@
 - PostgreSql
 - Generic Repository Design Pattern
 - Entity Framework Core
+- Ef-Table Per Hierarchy
 - Custom Http Client Service
