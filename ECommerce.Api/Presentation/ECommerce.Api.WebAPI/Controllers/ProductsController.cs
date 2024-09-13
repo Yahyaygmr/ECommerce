@@ -1,4 +1,7 @@
 ﻿
+using ECommerce.Api.Application.Repositories.FileRepositories;
+using ECommerce.Api.Application.Repositories.InvoinceRepositories;
+using ECommerce.Api.Application.Repositories.ProductImageFileRepositories;
 using ECommerce.Api.Application.Repositories.ProductRepositories;
 using ECommerce.Api.Application.RequestParameters;
 using ECommerce.Api.Application.Services;
@@ -17,13 +20,25 @@ namespace ECommerce.Api.WebAPI.Controllers
         private readonly IProductWriteRepository _productWriteRepository;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IFileService _fileService;
+        private readonly IFileReadRepository _fileReadRepository;
+        private readonly IFileWriteRepository _fileWriteRepository;
+        private readonly IProductImageFileReadRepository _productImageFileReadRepository;
+        private readonly IProductImageFileWriteRepository _productImageFileWriteRepository;
+        private readonly IInvoinceFileWriteRepository _invoinceFileWriteRepository;
+        private readonly IInvoinceFileReadRepository _invoinceFileReadRepository;
 
-        public ProductsController(IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService)
+        public ProductsController(IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService, IFileReadRepository fileReadRepository, IFileWriteRepository fileWriteRepository, IProductImageFileReadRepository productImageFileReadRepository, IProductImageFileWriteRepository productImageFileWriteRepository, IInvoinceFileWriteRepository invoinceFileWriteRepository, IInvoinceFileReadRepository invoinceFileReadRepository)
         {
             _productReadRepository = productReadRepository;
             _productWriteRepository = productWriteRepository;
             _webHostEnvironment = webHostEnvironment;
             _fileService = fileService;
+            _fileReadRepository = fileReadRepository;
+            _fileWriteRepository = fileWriteRepository;
+            _productImageFileReadRepository = productImageFileReadRepository;
+            _productImageFileWriteRepository = productImageFileWriteRepository;
+            _invoinceFileWriteRepository = invoinceFileWriteRepository;
+            _invoinceFileReadRepository = invoinceFileReadRepository;
         }
 
         [HttpGet]
@@ -90,7 +105,27 @@ namespace ECommerce.Api.WebAPI.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Upload()
         {
-            await _fileService.UploadAsync("resource/product-images", Request.Form.Files);
+           var datas= await _fileService.UploadAsync("resource/files", Request.Form.Files);
+
+            //await _productImageFileWriteRepository.AddRangeAsync(datas.Select(d => new ProductImageFile
+            //{
+            //    FileName = d.filename,
+            //    Path = d.path,
+            //}).ToList());
+            //await _productImageFileWriteRepository.SaveAsync();
+            //await _invoinceFileWriteRepository.AddRangeAsync(datas.Select(d => new InvoinceFile
+            //{
+            //    FileName = d.filename,
+            //    Path = d.path,
+            //    Price = new Random().Next()
+            //}).ToList());
+            //await _invoinceFileWriteRepository.SaveAsync();
+            await _fileWriteRepository.AddRangeAsync(datas.Select(d => new CFile
+            {
+                FileName = d.filename,
+                Path = d.path,
+            }).ToList());
+            await _fileWriteRepository.SaveAsync();
 
             return Ok(new { message = "Files successfully uploaded" });
         }
