@@ -11,4 +11,5 @@
 - Generic Repository Design Pattern
 - Entity Framework Core
 - Ef-Table Per Hierarchy
+- Azure Blob Storage
 - Custom Http Client Service
