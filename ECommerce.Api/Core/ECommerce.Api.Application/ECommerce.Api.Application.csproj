@@ -17,8 +17,4 @@
     <ProjectReference Include="..\ECommerce.Api.Domain\ECommerce.Api.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Abstraction\Storage\Azure\" />
-  </ItemGroup>
-
 </Project>
