@@ -43,14 +43,23 @@ namespace ECommerce.Api.Infrastructure.Services.Storage.Azure
         {
             _blobContainerClient = _blobServiceClient.GetBlobContainerClient(pathOrContainerName);
             await _blobContainerClient.CreateIfNotExistsAsync();
-            await _blobContainerClient.SetAccessPolicyAsync(PublicAccessType.BlobContainer);
+            //try
+            //{
+            //    await _blobContainerClient.SetAccessPolicyAsync(PublicAccessType.BlobContainer);
+            //}
+            //catch (Exception ex)
+            //{
+
+            //    throw new Exception(ex.Message);
+            //} burada yetki hatası alıyorum azure tarafında çözemedim.
 
             List<(string filename, string path)> datas = new();
             foreach (IFormFile file in files)
             {
-                BlobClient blobClient = _blobContainerClient.GetBlobClient(file.Name);
-                await blobClient.UploadAsync(file.OpenReadStream());
-                datas.Add((file.Name, pathOrContainerName));
+               
+                    BlobClient blobClient = _blobContainerClient.GetBlobClient(file.FileName);
+                    await blobClient.UploadAsync(file.OpenReadStream());
+                    datas.Add((file.FileName, pathOrContainerName));
             }
             return datas;
         }
