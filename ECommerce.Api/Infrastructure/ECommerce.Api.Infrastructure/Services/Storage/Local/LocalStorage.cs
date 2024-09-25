@@ -1,6 +1,7 @@
 ﻿using ECommerce.Api.Application.Abstraction.Storage.Local;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -62,10 +63,14 @@ namespace ECommerce.Api.Infrastructure.Services.Storage.Local
             foreach (IFormFile file in files)
             {
                 //string fileNewName = await FileRenameAsync(uploadPath, file.FileName);
-                bool result = await CopyFileAsync($"{uploadPath}\\{file.Name}", file);
-                datas.Add((file.Name, $"{path}\\{file.Name}"));
-            }
+                bool result = await CopyFileAsync($"{uploadPath}\\{file.FileName}", file);
+                datas.Add((file.FileName, $"{path}\\{file.FileName}"));
+               
 
+
+                //bool result = await CopyFileAsync($"{uploadPath}\\{file.Name}", file);
+                //datas.Add((file.Name, $"{path}\\{file.Name}"));
+            }
             return datas;
         }
     }

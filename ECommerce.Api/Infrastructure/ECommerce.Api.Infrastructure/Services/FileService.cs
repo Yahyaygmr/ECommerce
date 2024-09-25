@@ -1,4 +1,4 @@
-﻿using ECommerce.Api.Application.Services;
+﻿
 using ECommerce.Api.Infrastructure.Operations;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Api.Infrastructure.Services
 {
-    public class FileService : IFileService
+    public class FileService 
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
 
