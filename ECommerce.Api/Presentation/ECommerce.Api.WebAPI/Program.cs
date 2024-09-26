@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.PersistenceServiceRegistrations();
 builder.Services.InfrastructureServiceRegistrations();
 
-builder.Services.AddStorage<AzureStorage>();
+builder.Services.AddStorage<LocalStorage>();
 
 builder.Services.AddCors(options =>
 {
