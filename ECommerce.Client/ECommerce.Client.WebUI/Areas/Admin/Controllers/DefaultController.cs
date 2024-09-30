@@ -47,6 +47,5 @@ namespace ECommerce.Client.WebUI.Areas.Admin.Controllers
                 return StatusCode((int)response.StatusCode, new { message = "Error uploading files to the API." });
             }
         }
-
     }
 }

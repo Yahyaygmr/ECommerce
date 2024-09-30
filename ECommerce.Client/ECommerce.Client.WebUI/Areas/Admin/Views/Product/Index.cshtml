@@ -20,6 +20,7 @@
             <th>CreatedDate</th>
             <th>UpdatedDate</th>
             <th class="text-center">Sil</th>
+            <th>Resim Ekle</th>
             <th>Güncelle</th>
         </tr>
     </thead>
@@ -36,7 +37,8 @@
                 <th>@item.CreatedDate</th>
                 <th>@item.UpdatedDate</th>
                 <th class="text-center"> @await Component.InvokeAsync("DeleteDirectiveComponentPartial",new DeleteDirectiveModel{area = "Admin",controller="Product",action="Delete",ItemId = item.Id.ToString()})</th>
-                <th><a href="/Admin/Default/Update/@item.Id"><img src="~/assets/editing.png" style="height:25px;width=25px;" /></a></th>
+                <th><a href="/Admin/Default/Update/@item.Id"><img src="~/assets/imageicon.png" style="height:25px; width=25px;" /></a></th>
+                <th class="text-center"><a href="/Admin/Default/Update/@item.Id"><img src="~/assets/editing.png" style="height:25px; width:25px;" /></a></th>
             </tr>
         }
     </tbody>
