@@ -36,8 +36,13 @@
                 <th>@item.Stock</th>
                 <th>@item.CreatedDate</th>
                 <th>@item.UpdatedDate</th>
-                <th class="text-center"> @await Component.InvokeAsync("DeleteDirectiveComponentPartial",new DeleteDirectiveModel{area = "Admin",controller="Product",action="Delete",ItemId = item.Id.ToString()})</th>
-                <th><a href="/Admin/Default/Update/@item.Id"><img src="~/assets/imageicon.png" style="height:25px; width=25px;" /></a></th>
+
+                <th class="text-center"> @await Component.InvokeAsync("DeleteDirectiveComponentPartial",
+                new DeleteDirectiveModel{area = "Admin",controller="Product",action="Delete",ItemId = item.Id.ToString()})</th>
+
+                <th>@await Component.InvokeAsync("FileUploadComponentPartial",
+                new FileUplaoadModel{area="Admin",controller="Default",action="UploadFiles",querystring=$"productId={item.Id}"})</th>
+
                 <th class="text-center"><a href="/Admin/Default/Update/@item.Id"><img src="~/assets/editing.png" style="height:25px; width:25px;" /></a></th>
             </tr>
         }
@@ -46,7 +51,11 @@
         <tr class="bg-dark-light1">
 
           
-            <td colspan="3" style="text-align: left;" class="pt-3">Toplam Kayıt:  <strong>@Model.TotalCount </strong>/ Sayfa: <strong>@(Model.Page + 1) - @(Math.Ceiling((double)Model.TotalCount / (double)Model.Size))</strong></td>
+            <td colspan="3" style="text-align: left;" class="pt-3">
+                Toplam Kayıt:  <strong>@Model.TotalCount </strong>
+                / 
+                Sayfa: <strong><span class="bg-light p-1">@(Model.Page + 1)</span> - @(Math.Ceiling((double)Model.TotalCount / (double)Model.Size))</strong>
+            </td>
             <td style="text-align: right;">
                 <select class="form-control" onchange="navigateToAction(this);">
                     <option value="">Seçiniz</option>
@@ -84,8 +93,8 @@
     </tfoot>
 </table>
 <br />
-@await Component.InvokeAsync("FileUploadComponentPartial")
 <script>
+    //Tablo da sayfada gösterilecek içerik sayısına göre yönlendirme yapmak için kullan : navigateToAction()
     function navigateToAction(select) {
         var selectedValue = select.value;
         if (selectedValue) {
@@ -94,7 +103,6 @@
             var controller = 'Product';
             var action = 'Index';
             var param = selectedValue;
-
             // URL'yi dinamik olarak oluştur ve yönlendir.
             var url = '/' + area + '/' + controller + '/' + action + '?size=' + param;
             window.location.href = url;

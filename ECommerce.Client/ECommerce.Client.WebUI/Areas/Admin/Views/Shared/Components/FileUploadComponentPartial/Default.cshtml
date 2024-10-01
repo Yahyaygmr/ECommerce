@@ -1,18 +1,181 @@
-﻿<form id="fileUploadForm" enctype="multipart/form-data">
-    <div class="mb-3">
-        <label for="formFileMultiple" class="form-label">Multiple files input example</label>
-        <input class="form-control" type="file" id="formFileMultiple" multiple>
-    </div>
-    <button id="sendbutton" type="button" disabled class="btn btn-info">Dosyaları Kaydet</button>
-</form>
+﻿@model FileUplaoadModel
 
+@{
+    var link = $"/{Model.area}/{Model.controller}/{Model.action}";
+
+    // Eğer querystring boş değilse, onu ekle
+
+    if (!string.IsNullOrEmpty(Model.querystring))
+    {
+        link += $"?{Model.querystring}";
+    }
+    ///Admin/Default/UploadFiles
+}
 <!-- Dosya isimlerini göstereceğimiz alan -->
-<ul id="fileList"></ul>
+
+
+<button data-bs-toggle="modal" data-bs-target="#imageModal" class="btn"><img src="~/assets/imageicon.png" style="height:25px;width:25px;" /></button>
+
+
+<!-- Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="imageModalLabel">Dosya Yükleme</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger">Yüklemek İstediğiniz Dosyayı Seçiniz...</div>
+                <form id="fileUploadForm" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        @*  <label for="formFileMultiple" class="form-label">Seçiniz...</label> *@
+                        <input class="form-control" type="file" id="formFileMultiple" multiple>
+                    </div>
+
+                </form>
+                <ul id="fileList"></ul>
+                <div class="container">
+
+                    <div class="row">
+                        <div class="col-6 mt-1">
+                            <div class="card" >
+                                <img class="card-img-top" src="..." alt="Card image cap">
+                                <div class="card-body">
+                                    <h5 class="card-title">Card title</h5>
+                                    <a href="#" class="btn btn-primary">Sil</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 mt-1">
+                            <div class="card" >
+                                <img class="card-img-top" src="..." alt="Card image cap">
+                                <div class="card-body">
+                                    <h5 class="card-title">Card title</h5>
+                                    <a href="#" class="btn btn-primary">Sil</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 mt-1">
+                            <div class="card" >
+                                <img class="card-img-top" src="..." alt="Card image cap">
+                                <div class="card-body">
+                                    <h5 class="card-title">Card title</h5>
+                                    <a href="#" class="btn btn-primary">Sil</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 mt-1">
+                            <div class="card" >
+                                <img class="card-img-top" src="..." alt="Card image cap">
+                                <div class="card-body">
+                                    <h5 class="card-title">Card title</h5>
+                                    <a href="#" class="btn btn-primary">Sil</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 mt-1">
+                            <div class="card" >
+                                <img class="card-img-top" src="..." alt="Card image cap">
+                                <div class="card-body">
+                                    <h5 class="card-title">Card title</h5>
+                                    <a href="#" class="btn btn-primary">Sil</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 mt-1">
+                            <div class="card" >
+                                <img class="card-img-top" src="..." alt="Card image cap">
+                                <div class="card-body">
+                                    <h5 class="card-title">Card title</h5>
+                                    <a href="#" class="btn btn-primary">Sil</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 mt-1">
+                            <div class="card" >
+                                <img class="card-img-top" src="..." alt="Card image cap">
+                                <div class="card-body">
+                                    <h5 class="card-title">Card title</h5>
+                                    <a href="#" class="btn btn-primary">Sil</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 mt-1">
+                            <div class="card" >
+                                <img class="card-img-top" src="..." alt="Card image cap">
+                                <div class="card-body">
+                                    <h5 class="card-title">Card title</h5>
+                                    <a href="#" class="btn btn-primary">Sil</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 mt-1">
+                            <div class="card" >
+                                <img class="card-img-top" src="..." alt="Card image cap">
+                                <div class="card-body">
+                                    <h5 class="card-title">Card title</h5>
+                                    <a href="#" class="btn btn-primary">Sil</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 mt-1">
+                            <div class="card" >
+                                <img class="card-img-top" src="..." alt="Card image cap">
+                                <div class="card-body">
+                                    <h5 class="card-title">Card title</h5>
+                                    <a href="#" class="btn btn-primary">Sil</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 mt-1">
+                            <div class="card" >
+                                <img class="card-img-top" src="..." alt="Card image cap">
+                                <div class="card-body">
+                                    <h5 class="card-title">Card title</h5>
+                                    <a href="#" class="btn btn-primary">Sil</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 mt-1">
+                            <div class="card" >
+                                <img class="card-img-top" src="..." alt="Card image cap">
+                                <div class="card-body">
+                                    <h5 class="card-title">Card title</h5>
+                                    <a href="#" class="btn btn-primary">Sil</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 mt-1">
+                            <div class="card" >
+                                <img class="card-img-top" src="..." alt="Card image cap">
+                                <div class="card-body">
+                                    <h5 class="card-title">Card title</h5>
+                                    <a href="#" class="btn btn-primary">Sil</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="dismissbtn" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
+                <button id="sendbutton" type="button" disabled class="btn btn-info">Dosyaları Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     const input = document.getElementById("formFileMultiple");
     const fileList = document.getElementById("fileList");
     const sendButton = document.getElementById("sendbutton");
+    const dismissButton = document.getElementById("dismissbtn");
+
+    //üstte oluşturduğum linki razordan javascripte çeviriyorum
+    const link = "@link"
 
     // Sayfa yüklendiğinde buton devre dışı bırakılıyor
     document.addEventListener("DOMContentLoaded", function () {
@@ -50,9 +213,9 @@
             formData.append("files", input.files[i]);
         }
 
-        fetch('/Admin/Default/UploadFiles', {
+        fetch(`${link}`, {
             method: 'POST',
-            body: formData
+            body: formData,
         })
             .then(response => {
                 if (response.ok) {
@@ -71,6 +234,12 @@
                 alert("An error occurred: " + "Bağlantı Hatası !");
             });
     });
+
+    // Vazgeç butonuna tıklayınca listeyi sıfırla
+    dismissButton.addEventListener("click", function () {
+        fileList.innerHTML = "";
+        input.value = "";
+        sendButton.disabled = true;
+    });
+
 </script>
-
-

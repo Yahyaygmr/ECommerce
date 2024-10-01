@@ -19,13 +19,13 @@ namespace ECommerce.Client.WebUI.Areas.Admin.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> UploadFiles(List<IFormFile> files)
+        public async Task<IActionResult> UploadFiles(List<IFormFile> files, string id)
         {
             if (files == null || files.Count == 0)
             {
                 return BadRequest("No files were uploaded.");
             }
-
+            string ids = id;
             // API'ye dosyaları gönderme işlemi
 
             var content = files;
@@ -37,7 +37,7 @@ namespace ECommerce.Client.WebUI.Areas.Admin.Controllers
 
             };
             var response = await _customHttpClientService.PostData(param, content);
-           
+
             if (response.IsSuccessStatusCode)
             {
                 return Json(new { success = true });

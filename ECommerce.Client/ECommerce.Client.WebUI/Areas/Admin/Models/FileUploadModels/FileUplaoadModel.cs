@@ -2,6 +2,7 @@
 {
     public class FileUplaoadModel
     {
+        public string? area { get; set; }
         public string? controller { get; set; }
         public string? action { get; set; }
         public string? querystring { get; set; }
