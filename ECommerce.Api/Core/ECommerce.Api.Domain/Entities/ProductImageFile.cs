@@ -8,5 +8,6 @@ namespace ECommerce.Api.Domain.Entities
 {
     public class ProductImageFile : CFile
     {
+        public ICollection<Product> Products { get; set; }
     }
 }

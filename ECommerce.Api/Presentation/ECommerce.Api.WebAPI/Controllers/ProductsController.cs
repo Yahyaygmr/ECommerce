@@ -107,11 +107,14 @@ namespace ECommerce.Api.WebAPI.Controllers
         {
             List<(string fileName, string path)> datas = await _storageService.UploadAsync("photo-images", Request.Form.Files);
 
+           Product product= await _productReadRepository.GetByIdAsync(id);
+
             await _productImageFileWriteRepository.AddRangeAsync(datas.Select(r => new ProductImageFile
             {
                 FileName = r.fileName,
                 Path = r.path,
                 Storage = _storageService.StorageName,
+                Products = new List<Product>() { product }
             }).ToList());
 
             await _productImageFileWriteRepository.SaveAsync();
