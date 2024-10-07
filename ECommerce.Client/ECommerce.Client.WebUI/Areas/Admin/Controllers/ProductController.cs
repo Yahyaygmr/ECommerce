@@ -3,6 +3,7 @@ using ECommerce.Client.WebUI.Custom.CustomHttpClient;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Drawing;
 
 namespace ECommerce.Client.WebUI.Areas.Admin.Controllers
 {
@@ -124,6 +125,21 @@ namespace ECommerce.Client.WebUI.Areas.Admin.Controllers
             var returnvalue = await _customHttpClientService.Delete(param, id);
             return RedirectToAction("Index");
         }
+        //[HttpGet("id")]
+        public async Task<IActionResult> DeleteProductImage(string id,string imageId)
+        {
+            RequestParameters param = new()
+            {
+                controller = "Products",
+                action = "DeleteProductImage",
+                querystring = $"imageId={imageId}"
+
+            };
+            var returnvalue = await _customHttpClientService.Delete(param, id);
+
+            return RedirectToAction("Index");
+        }
+        // /Admin/Product/Index
     }
 }
 public class ErrorDetail

@@ -1,0 +1,21 @@
+﻿@model List<ECommerce.Client.WebUI.Areas.Admin.Models.ImageModels.ImageListModel>
+
+<h1>id : @ViewBag.Id</h1>
+<div class="container">
+
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-4 mt-1">
+                <div class="card" style="width:120px;height:150px;">
+                    <img class="card-img-top" src="@item.path" alt="Card image cap" >
+                    <div class="card-body">
+              @*           <h5 class="card-title">@item.path</h5> *@
+                        <a href="/Admin/Product/DeleteProductImage/@ViewBag.Id?imageId=@item.imageId" class="btn btn-warning">Sil</a>
+                    </div>
+                </div>
+            </div>
+        }
+       
+    </div>
+</div>
