@@ -103,34 +103,20 @@ namespace ECommerce.Api.WebAPI.Controllers
             return Ok();
         }
         [HttpPost("[action]")]
-        public async Task<IActionResult> Upload()
+        public async Task<IActionResult> Upload(string id)
         {
-            var datas = await _storageService.UploadAsync("files", Request.Form.Files);
-            //var datas= await _fileService.UploadAsync("resource/files", Request.Form.Files);
+            List<(string fileName, string path)> datas = await _storageService.UploadAsync("photo-images", Request.Form.Files);
 
-            await _productImageFileWriteRepository.AddRangeAsync(datas.Select(d => new ProductImageFile
+            await _productImageFileWriteRepository.AddRangeAsync(datas.Select(r => new ProductImageFile
             {
-                FileName = d.filename,
-                Path = d.path,
-                Storage = _storageService.StorageName
+                FileName = r.fileName,
+                Path = r.path,
+                Storage = _storageService.StorageName,
             }).ToList());
-            await _productImageFileWriteRepository.SaveAsync();
-            //await _invoinceFileWriteRepository.AddRangeAsync(datas.Select(d => new InvoinceFile
-            //{
-            //    FileName = d.filename,
-            //    Path = d.path,
-            //    Price = new Random().Next()
-            //}).ToList());
-            //await _invoinceFileWriteRepository.SaveAsync();
-            //await _fileWriteRepository.AddRangeAsync(datas.Select(d => new CFile
-            //{
-            //    FileName = d.filename,
-            //    Path = d.path,
-            //    Storage = _storageService.StorageName,
-            //}).ToList());
-            //await _fileWriteRepository.SaveAsync();
 
-            return Ok(new { message = "Files successfully uploaded" });
+            await _productImageFileWriteRepository.SaveAsync();
+
+            return Ok();
         }
     }
 }

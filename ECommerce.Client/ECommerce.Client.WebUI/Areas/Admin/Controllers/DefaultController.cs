@@ -19,13 +19,12 @@ namespace ECommerce.Client.WebUI.Areas.Admin.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> UploadFiles(List<IFormFile> files, string id)
+        public async Task<IActionResult> UploadFiles([FromQuery] string id,List<IFormFile> files)
         {
             if (files == null || files.Count == 0)
             {
                 return BadRequest("No files were uploaded.");
             }
-            string ids = id;
             // API'ye dosyaları gönderme işlemi
 
             var content = files;
@@ -33,8 +32,8 @@ namespace ECommerce.Client.WebUI.Areas.Admin.Controllers
             RequestParameters param = new()
             {
                 controller = "products",
-                action = "upload"
-
+                action = "upload",
+                querystring =$"id={id}"
             };
             var response = await _customHttpClientService.PostData(param, content);
 
@@ -46,6 +45,12 @@ namespace ECommerce.Client.WebUI.Areas.Admin.Controllers
             {
                 return StatusCode((int)response.StatusCode, new { message = "Error uploading files to the API." });
             }
+        }
+
+        public IActionResult FilePartial(string id)
+        {
+            ViewBag.id = id;
+            return PartialView();
         }
     }
 }
