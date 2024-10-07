@@ -1,3 +1,4 @@
+using ECommerce.Api.Application;
 using ECommerce.Api.Application.Validators.ProductValidators;
 using ECommerce.Api.Infrastructure;
 using ECommerce.Api.Infrastructure.Filters;
@@ -11,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.PersistenceServiceRegistrations();
 builder.Services.InfrastructureServiceRegistrations();
+builder.Services.ApplicationServiceRegistrations();
 
 builder.Services.AddStorage<AzureStorage>();
 

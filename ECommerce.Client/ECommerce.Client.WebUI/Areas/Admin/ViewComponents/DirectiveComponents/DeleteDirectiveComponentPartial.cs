@@ -7,6 +7,7 @@ namespace ECommerce.Client.WebUI.Areas.Admin.ViewComponents.DirectiveComponents
     {
         public IViewComponentResult Invoke(DeleteDirectiveModel model)
         {
+            ViewContext.HttpContext.Response.Headers["Cache-Control"] = "no-cache";
             return View(model);
         }
     }
