@@ -24,7 +24,6 @@ namespace ECommerce.Client.WebUI.Areas.Admin.Controllers
             {
                 controller = "Products",
                 querystring = $"page={page}&size={size}",
- 
             };
             var values = await _customHttpClientService.Get<GetProductsWithPagination>(param);
             return View(values);

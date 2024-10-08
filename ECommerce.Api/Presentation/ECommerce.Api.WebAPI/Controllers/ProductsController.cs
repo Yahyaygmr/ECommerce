@@ -2,6 +2,7 @@
 using ECommerce.Api.Application.Abstraction.Storage;
 using ECommerce.Api.Application.Features.Products.Commands.CreateProduct;
 using ECommerce.Api.Application.Features.Products.Queries.GetAllProduct;
+using ECommerce.Api.Application.Features.Products.Queries.GetByIdProduct;
 using ECommerce.Api.Application.Repositories.FileRepositories;
 using ECommerce.Api.Application.Repositories.InvoinceRepositories;
 using ECommerce.Api.Application.Repositories.ProductImageFileRepositories;
@@ -57,10 +58,10 @@ namespace ECommerce.Api.WebAPI.Controllers
             GetAllProductQueryResponse response = await _mediator.Send(request);
             return Ok(response);
         }
-        [HttpGet("[action]/{id}")]
-        public async Task<IActionResult> GetById(string id)
+        [HttpGet("[action]/{Id}")]
+        public async Task<IActionResult> GetById(GetByIdProductQueryRequest request)
         {
-            var product = await _productReadRepository.GetByIdAsync(id, false);
+            
             return Ok(product);
         }
 
