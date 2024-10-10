@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Api.Application.Features.ProductImageFiles.Queries.GetProductImages
 {
-    public class GetProductImagesQueryRequest : IRequest<GetProductImagesQueryResponse>
+    public class GetProductImagesQueryRequest : IRequest<List<GetProductImagesQueryResponse>>
     {
+        public string Id { get; set; }
     }
 }
