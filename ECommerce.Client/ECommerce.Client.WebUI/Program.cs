@@ -1,9 +1,15 @@
 using ECommerce.Client.WebUI.Custom.CustomHttpClient;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<CustomHttpClientService>();
 
