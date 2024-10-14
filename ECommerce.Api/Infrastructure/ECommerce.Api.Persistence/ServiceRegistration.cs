@@ -5,6 +5,7 @@ using ECommerce.Api.Application.Repositories.InvoinceRepositories;
 using ECommerce.Api.Application.Repositories.OrderRepositories;
 using ECommerce.Api.Application.Repositories.ProductImageFileRepositories;
 using ECommerce.Api.Application.Repositories.ProductRepositories;
+using ECommerce.Api.Domain.Entities.Identity;
 using ECommerce.Api.Persistence.Configurations;
 using ECommerce.Api.Persistence.Context;
 using ECommerce.Api.Persistence.Repositories.CustomerRepositories;
@@ -28,6 +29,8 @@ namespace ECommerce.Api.Persistence
             {
                 options.UseNpgsql(Configuration.ConnectionString);
             });
+
+            services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<ECommerceApiDbContext>();
 
             services.AddScoped<ICustomerReadRepository, CustomerReadRepository>();
             services.AddScoped<ICustomerWriteRepository, CustomerWriteRepository>();

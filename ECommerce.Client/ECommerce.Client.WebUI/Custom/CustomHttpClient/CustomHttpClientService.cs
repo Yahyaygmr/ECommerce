@@ -1,4 +1,6 @@
 ﻿using ECommerce.Client.WebUI.Areas.Admin.Models.ProductModels;
+using ECommerce.Client.WebUI.Models.Responses;
+using ECommerce.Client.WebUI.Models.ReturnVals;
 using Newtonsoft.Json;
 using System.Net;
 using System.Net.Http;
@@ -9,12 +11,14 @@ namespace ECommerce.Client.WebUI.Custom.CustomHttpClient
     public class CustomHttpClientService
     {
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly HttpClient _client;
         private readonly IConfiguration _configuration;
         private string BaseUrl;
 
         public CustomHttpClientService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
             _httpClientFactory = httpClientFactory;
+            _client = _httpClientFactory.CreateClient();
             _configuration = configuration;
             BaseUrl = _configuration["ApiBaseUrls:BaseUrl"]!;
         }
@@ -23,7 +27,7 @@ namespace ECommerce.Client.WebUI.Custom.CustomHttpClient
             return $"{(param.baseUrl != null ? $"{param.baseUrl}" : $"{BaseUrl}")}{(param.controller != null ? $"/{param.controller}" : "")}{(param.action != null ? $"/{param.action}" : "")}";
 
         }
-        public async Task<T> Get<T>(RequestParameters param, string? id = null)
+        public async Task<ResponseWrapper<T>> Get<T>(RequestParameters param, string? id = null)
         {
             string url = "";
             if (param.fullEndpoint != null)
@@ -31,51 +35,57 @@ namespace ECommerce.Client.WebUI.Custom.CustomHttpClient
             else
                 url = $"{CreateUrl(param)}{(id != null ? $"/{id}" : "")}{(param.querystring != null ? $"?{param.querystring}" : "")}";
 
-            HttpClient client = _httpClientFactory.CreateClient();
-            HttpResponseMessage responseMessage = await client.GetAsync(url);
+
+            HttpResponseMessage responseMessage = await _client.GetAsync(url);
+            var response = new ResponseWrapper<T> { StatusCode = responseMessage.StatusCode };
             if (responseMessage.IsSuccessStatusCode)
             {
                 string stringData = await responseMessage.Content.ReadAsStringAsync();
-                T jsonData = JsonConvert.DeserializeObject<T>(stringData)!;
-                return jsonData;
+                response.Data = JsonConvert.DeserializeObject<T>(stringData)!;
+                response.Message = "Başarılı";
             }
             else
             {
-                // Eğer status code başarılı değilse, hata fırlat
-                string errorResponse = await responseMessage.Content.ReadAsStringAsync();
-                throw new HttpRequestException($"Request failed with status code {responseMessage.StatusCode}: {errorResponse}");
+                response.Message = await responseMessage.Content.ReadAsStringAsync();
+
             }
+            return response;
 
         }
-        public async Task<HttpResponseMessage> Post<T>(RequestParameters param, T body)
+        public async Task<ResponseWrapper<string>> Post<T>(RequestParameters param, T body)
         {
             string url = "";
             if (param.fullEndpoint != null)
                 url = param.fullEndpoint;
             else
                 url = $"{CreateUrl(param)}{(param.querystring != null ? $"?{param.querystring}" : "")}";
-            HttpClient client = _httpClientFactory.CreateClient();
+
+
             var jsonData = JsonConvert.SerializeObject(body);
             StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            var responseMessage = await client.PostAsync(url, stringContent);
+            var responseMessage = await _client.PostAsync(url, stringContent);
+
+            var response = new ResponseWrapper<string> { StatusCode = responseMessage.StatusCode };
+
             if (responseMessage.IsSuccessStatusCode)
             {
-                return responseMessage;
+                response.Message = await responseMessage.Content.ReadAsStringAsync();
             }
             else
             {
-                // Eğer status code başarılı değilse, hata fırlat
-                string errorResponse = await responseMessage.Content.ReadAsStringAsync();
-                throw new HttpRequestException($"Request failed with status code {responseMessage.StatusCode}: {errorResponse}");
+                response.Message = await responseMessage.Content.ReadAsStringAsync();
             }
+
+            return response;
         }
-        public async Task<HttpResponseMessage> PostData<T>(RequestParameters param, T body)
+        public async Task<ResponseWrapper<string>> PostData<T>(RequestParameters param, T body)
         {
             string url = "";
             if (param.fullEndpoint != null)
                 url = param.fullEndpoint;
             else
                 url = $"{CreateUrl(param)}{(param.querystring != null ? $"?{param.querystring}" : "")}";
+
             HttpClient client = _httpClientFactory.CreateClient();
             var jsonData = JsonConvert.SerializeObject(body);
             StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
@@ -95,59 +105,65 @@ namespace ECommerce.Client.WebUI.Custom.CustomHttpClient
                 }
             }
             var responseMessage = await client.PostAsync(url, dataContent);
+            var response = new ResponseWrapper<string> { StatusCode = responseMessage.StatusCode };
+
             if (responseMessage.IsSuccessStatusCode)
             {
-                return responseMessage;
+                response.Message = await responseMessage.Content.ReadAsStringAsync();
             }
             else
             {
-                // Eğer status code başarılı değilse, hata fırlat
-                string errorResponse = await responseMessage.Content.ReadAsStringAsync();
-                throw new HttpRequestException($"Request failed with status code {responseMessage.StatusCode}: {errorResponse}");
+                response.Message = await responseMessage.Content.ReadAsStringAsync();
             }
+
+            return response;
         }
-        public async Task<HttpStatusCode> Put<T>(RequestParameters param, T body)
+        public async Task<ResponseWrapper<string>> Put<T>(RequestParameters param, T body)
         {
             string url = "";
             if (param.fullEndpoint != null)
                 url = param.fullEndpoint;
             else
                 url = $"{CreateUrl(param)}{(param.querystring != null ? $"?{param.querystring}" : "")}";
-            HttpClient client = _httpClientFactory.CreateClient();
+
             var jsonData = JsonConvert.SerializeObject(body);
             StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            var responseMessage = await client.PutAsync(url, stringContent);
+            var responseMessage = await _client.PutAsync(url, stringContent);
+            var response = new ResponseWrapper<string> { StatusCode = responseMessage.StatusCode };
+
             if (responseMessage.IsSuccessStatusCode)
             {
-                return responseMessage.StatusCode;
+                response.Message = await responseMessage.Content.ReadAsStringAsync();
             }
             else
             {
-                // Eğer status code başarılı değilse, hata fırlat
-                string errorResponse = await responseMessage.Content.ReadAsStringAsync();
-                throw new HttpRequestException($"Request failed with status code {responseMessage.StatusCode}: {errorResponse}");
+                response.Message = await responseMessage.Content.ReadAsStringAsync();
             }
+
+            return response;
         }
-        public async Task<HttpStatusCode> Delete(RequestParameters param, string id)
+        public async Task<ResponseWrapper<string>> Delete(RequestParameters param, string id)
         {
             string url = "";
             if (param.fullEndpoint != null)
                 url = param.fullEndpoint;
             else
                 url = $"{CreateUrl(param)}{(id != null ? $"/{id}" : "")}{(param.querystring != null ? $"?{param.querystring}" : "")}";
-         
+
             HttpClient client = _httpClientFactory.CreateClient();
             var responseMessage = await client.DeleteAsync(url);
+            var response = new ResponseWrapper<string> { StatusCode = responseMessage.StatusCode };
+
             if (responseMessage.IsSuccessStatusCode)
             {
-                return responseMessage.StatusCode;
+                response.Message = "Silme işlemi başarılı.";
             }
             else
             {
-                // Eğer status code başarılı değilse, hata fırlat
-                string errorResponse = await responseMessage.Content.ReadAsStringAsync();
-                throw new HttpRequestException($"Request failed with status code {responseMessage.StatusCode}: {errorResponse}");
+                response.Message = await responseMessage.Content.ReadAsStringAsync();
             }
+
+            return response;
         }
     }
 }

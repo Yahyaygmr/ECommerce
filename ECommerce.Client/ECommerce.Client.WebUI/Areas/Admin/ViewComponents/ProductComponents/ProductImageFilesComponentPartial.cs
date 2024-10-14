@@ -1,6 +1,7 @@
 ﻿using ECommerce.Client.WebUI.Areas.Admin.Models.ImageModels;
 using ECommerce.Client.WebUI.Custom.CustomHttpClient;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace ECommerce.Client.WebUI.Areas.Admin.ViewComponents.ProductComponents
 {
@@ -21,10 +22,10 @@ namespace ECommerce.Client.WebUI.Areas.Admin.ViewComponents.ProductComponents
                 controller = "products",
                 action = "GetProductImages",
             };
-            var response = await _customHttpClientService.Get<List<ImageListModel>>(param,id);
+            var response = await _customHttpClientService.Get<List<ImageListModel>>(param, id);
+            List<ImageListModel> list = response.Data;
 
-
-            return View(response);
+            return View(list);
         }
     }
 }

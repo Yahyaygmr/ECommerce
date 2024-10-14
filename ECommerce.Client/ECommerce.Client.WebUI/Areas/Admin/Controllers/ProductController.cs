@@ -25,8 +25,9 @@ namespace ECommerce.Client.WebUI.Areas.Admin.Controllers
                 controller = "Products",
                 querystring = $"page={page}&size={size}",
             };
-            var values = await _customHttpClientService.Get<GetProductsWithPagination>(param);
-            return View(values);
+            var response = await _customHttpClientService.Get<GetProductsWithPagination>(param);
+            GetProductsWithPagination list = response.Data;
+            return View(list);
         }
         [HttpGet]
         public async Task<IActionResult> Create()

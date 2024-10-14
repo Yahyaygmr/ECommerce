@@ -37,7 +37,7 @@ namespace ECommerce.Client.WebUI.Areas.Admin.Controllers
             };
             var response = await _customHttpClientService.PostData(param, content);
 
-            if (response.IsSuccessStatusCode)
+            if (response.IsSuccess)
             {
                 return Json(new { success = true });
             }
