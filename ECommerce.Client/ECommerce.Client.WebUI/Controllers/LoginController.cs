@@ -1,6 +1,9 @@
 ﻿using ECommerce.Client.WebUI.Custom.CustomHttpClient;
 using ECommerce.Client.WebUI.Models.LoginModels;
+using ECommerce.Client.WebUI.Models.Responses;
+using ECommerce.Client.WebUI.Models.Tokens;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace ECommerce.Client.WebUI.Controllers
 {
@@ -31,6 +34,20 @@ namespace ECommerce.Client.WebUI.Controllers
                 action = "Login"
             };
             var response = await _customHttpClientService.Post(param, model);
+
+            if (response.Message != null)
+            {
+                MessageResponse mresponse = JsonConvert.DeserializeObject<MessageResponse>(response.Message);
+            
+                if (mresponse.AccessToken != null)
+                {
+                    Token token1 = new()
+                    {
+                        AccessToken = mresponse.AccessToken,
+                        Expiration = Convert.ToDateTime(mresponse.Expiration),
+                    };
+                }
+            }
             return View();
         }
     }

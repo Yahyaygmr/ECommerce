@@ -1,7 +1,7 @@
-﻿using ECommerce.Client.WebUI.Models.Tokens;
+﻿using ECommerce.Api.Application.Dtos.TokenDtos;
 using System.Net;
 
-namespace ECommerce.Client.WebUI.Models.Responses
+namespace ECommerce.Api.WebAPI.ResponseModel
 {
     public class ResponseWrapper<T>
     {

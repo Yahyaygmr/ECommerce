@@ -1,9 +1,12 @@
 ﻿
 using ECommerce.Api.Application.Features.AppUsers.Commands.CreateUser;
 using ECommerce.Api.Application.Features.AppUsers.Commands.LoginUser;
+using ECommerce.Api.WebAPI.ResponseModel;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace ECommerce.Api.WebAPI.Controllers
 {
@@ -32,7 +35,14 @@ namespace ECommerce.Api.WebAPI.Controllers
         {
             LoginUserCommandResponse response = await _mediator.Send(request);
 
-            return Ok(response);
+            ResponseWrapper<string> wp = new()
+            {
+                StatusCode = HttpStatusCode.OK,
+                AccessToken = response.Token.AccessToken,
+                Expiration = response.Token.Expiration,
+            };
+
+            return Ok(wp);
         }
     }
 }

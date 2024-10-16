@@ -7,6 +7,7 @@ using ECommerce.Api.Application.Features.Products.Commands.UpdateProduct;
 using ECommerce.Api.Application.Features.Products.Queries.GetAllProduct;
 using ECommerce.Api.Application.Features.Products.Queries.GetByIdProduct;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -14,6 +15,7 @@ namespace ECommerce.Api.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Admin")]
     public class ProductsController : ControllerBase
     {
 
