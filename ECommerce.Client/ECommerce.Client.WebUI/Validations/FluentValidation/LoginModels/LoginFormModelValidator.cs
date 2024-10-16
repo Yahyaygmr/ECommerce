@@ -7,7 +7,7 @@ namespace ECommerce.Client.WebUI.Validations.FluentValidation.LoginModels
     {
         public LoginFormModelValidator()
         {
-            RuleFor(x => x.UserName)
+            RuleFor(x => x.UsernameOrEmail)
           .NotEmpty().WithMessage("Kullanıcı adı boş olamaz")
           .MinimumLength(6).WithMessage("Lütfen Geçerli Bir Kullanıcı Adı veya Mail Girin");
 

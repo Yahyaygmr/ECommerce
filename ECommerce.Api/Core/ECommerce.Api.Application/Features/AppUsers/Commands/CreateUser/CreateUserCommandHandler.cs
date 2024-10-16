@@ -35,7 +35,7 @@ namespace ECommerce.Api.Application.Features.AppUsers.Commands.CreateUser
             else
             {
                 foreach (var error in result.Errors)
-                    response.Message += $"{error.Code} - {error.Description}<br>";
+                    response.Message += $"{error.Code} - {error.Description}\n";
                 //response.Message = "Kullanıcı Oluşturulurken Beklenmedik Bir Hata Oluştu";
             }
             return response;
