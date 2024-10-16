@@ -20,6 +20,10 @@ namespace ECommerce.Api.WebAPI.Controllers
         public async Task<IActionResult> CreateUser(CreateUserCommandRequest request)
         {
             CreateUserCommandResponse response = await _mediator.Send(request);
+            if(response.Succeeded.Equals(false))
+            {
+                return BadRequest(response);
+            }
             return Ok(response);
         }
     }
