@@ -27,6 +27,7 @@ namespace ECommerce.Api.WebAPI.Controllers
         }
 
         [HttpGet]
+
         public async Task<IActionResult> Get([FromQuery] GetAllProductQueryRequest request)
         {
 

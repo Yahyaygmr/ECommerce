@@ -1,6 +1,12 @@
 using ECommerce.Client.WebUI.Custom.CustomHttpClient;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,9 +15,30 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
-
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<CustomHttpClientService>();
+builder.Services.AddMvc(config =>
+{
+    var policy = new AuthorizationPolicyBuilder()
+    .RequireAuthenticatedUser()
+    .Build();
+    config.Filters.Add(new AuthorizeFilter(policy));
+});
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+            {
+                options.LoginPath = "/Login/Index"; // Giriþ sayfasý
+                options.LogoutPath = "/Login/Logout"; // Çýkýþ sayfasý
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(1); // Cookie süresi
+                options.SlidingExpiration = false; // Süre uzatýmý
+            });
+
+builder.Services.AddSession(); // Session desteði
+//builder.Services.AddSession(options =>
+//{
+//    options.IdleTimeout = TimeSpan.FromMinutes(5);
+//});
 
 var app = builder.Build();
 
@@ -27,7 +54,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseSession();
+app.UseAuthentication();
 app.UseAuthorization();
 app.UseEndpoints(endpoints =>
 {

@@ -59,8 +59,6 @@ namespace ECommerce.Client.WebUI.Custom.CustomHttpClient
                 url = param.fullEndpoint;
             else
                 url = $"{CreateUrl(param)}{(param.querystring != null ? $"?{param.querystring}" : "")}";
-
-
             var jsonData = JsonConvert.SerializeObject(body);
             StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
             var responseMessage = await _client.PostAsync(url, stringContent);

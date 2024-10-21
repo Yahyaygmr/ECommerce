@@ -25,6 +25,12 @@
             <h5 class="text-center">GİRİŞ YAP</h5>
             <div class="container mb-3">
                 <div class="row">
+                    @if (ViewBag.message != null)
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @ViewBag.message
+                        </div>
+                    }
                     <div class="col-2">
                     </div>
                     <div class="col-8">

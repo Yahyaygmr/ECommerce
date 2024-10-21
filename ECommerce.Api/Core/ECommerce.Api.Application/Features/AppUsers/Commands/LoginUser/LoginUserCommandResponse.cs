@@ -9,7 +9,7 @@ namespace ECommerce.Api.Application.Features.AppUsers.Commands.LoginUser
 {
     public class LoginUserCommandResponse
     {
-        public Token? Token { get; set; }
+        public Token Token { get; set; }
         public string? Message { get; set; }
     }
 }
