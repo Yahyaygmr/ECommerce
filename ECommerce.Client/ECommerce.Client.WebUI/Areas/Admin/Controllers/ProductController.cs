@@ -13,10 +13,12 @@ namespace ECommerce.Client.WebUI.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         private readonly CustomHttpClientService _customHttpClientService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ProductController(CustomHttpClientService customHttpClientService)
+        public ProductController(CustomHttpClientService customHttpClientService, IHttpContextAccessor httpContextAccessor)
         {
             _customHttpClientService = customHttpClientService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IActionResult> Index(int? size=5, int? page=0)
@@ -26,7 +28,8 @@ namespace ECommerce.Client.WebUI.Areas.Admin.Controllers
                 controller = "Products",
                 querystring = $"page={page}&size={size}",
             };
-            var response = await _customHttpClientService.Get<GetProductsWithPagination>(param);
+
+            var response = await _customHttpClientService.Get<GetProductsWithPagination>(param:param);
             GetProductsWithPagination list = response.Data;
             return View(list);
         }

@@ -11,23 +11,25 @@ namespace ECommerce.Client.WebUI.Custom.CustomHttpClient
     public class CustomHttpClientService
     {
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IHttpContextAccessor _httpContextAccessor; 
         private readonly HttpClient _client;
         private readonly IConfiguration _configuration;
         private string BaseUrl;
 
-        public CustomHttpClientService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        public CustomHttpClientService(IHttpClientFactory httpClientFactory, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _httpClientFactory = httpClientFactory;
             _client = _httpClientFactory.CreateClient();
             _configuration = configuration;
             BaseUrl = _configuration["ApiBaseUrls:BaseUrl"]!;
+            _httpContextAccessor = httpContextAccessor;
         }
         private string CreateUrl(RequestParameters param)
         {
             return $"{(param.baseUrl != null ? $"{param.baseUrl}" : $"{BaseUrl}")}{(param.controller != null ? $"/{param.controller}" : "")}{(param.action != null ? $"/{param.action}" : "")}";
 
         }
-        public async Task<ResponseWrapper<T>> Get<T>(RequestParameters param, string? id = null)
+        public async Task<ResponseWrapper<T>> Get<T>(RequestParameters param, string? id = null, string? token = null)
         {
             string url = "";
             if (param.fullEndpoint != null)
@@ -35,6 +37,11 @@ namespace ECommerce.Client.WebUI.Custom.CustomHttpClient
             else
                 url = $"{CreateUrl(param)}{(id != null ? $"/{id}" : "")}{(param.querystring != null ? $"?{param.querystring}" : "")}";
 
+            string? accessToken = _httpContextAccessor.HttpContext.User.FindFirst("AccessToken")?.Value;
+            if(!string.IsNullOrEmpty(accessToken))
+            {
+                _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+            }
 
             HttpResponseMessage responseMessage = await _client.GetAsync(url);
             var response = new ResponseWrapper<T> { StatusCode = responseMessage.StatusCode };
