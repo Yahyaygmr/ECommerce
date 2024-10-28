@@ -66,6 +66,12 @@ namespace ECommerce.Client.WebUI.Custom.CustomHttpClient
                 url = param.fullEndpoint;
             else
                 url = $"{CreateUrl(param)}{(param.querystring != null ? $"?{param.querystring}" : "")}";
+
+            string? accessToken = _httpContextAccessor.HttpContext.User.FindFirst("AccessToken")?.Value;
+            if (!string.IsNullOrEmpty(accessToken))
+            {
+                _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+            }
             var jsonData = JsonConvert.SerializeObject(body);
             StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
             var responseMessage = await _client.PostAsync(url, stringContent);
@@ -91,7 +97,12 @@ namespace ECommerce.Client.WebUI.Custom.CustomHttpClient
             else
                 url = $"{CreateUrl(param)}{(param.querystring != null ? $"?{param.querystring}" : "")}";
 
-            HttpClient client = _httpClientFactory.CreateClient();
+            string? accessToken = _httpContextAccessor.HttpContext.User.FindFirst("AccessToken")?.Value;
+            if (!string.IsNullOrEmpty(accessToken))
+            {
+                _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+            }
+
             var jsonData = JsonConvert.SerializeObject(body);
             StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
             MultipartFormDataContent dataContent = new();
@@ -109,7 +120,7 @@ namespace ECommerce.Client.WebUI.Custom.CustomHttpClient
                     }
                 }
             }
-            var responseMessage = await client.PostAsync(url, dataContent);
+            var responseMessage = await _client.PostAsync(url, dataContent);
             var response = new ResponseWrapper<string> { StatusCode = responseMessage.StatusCode };
 
             if (responseMessage.IsSuccessStatusCode)
@@ -130,6 +141,12 @@ namespace ECommerce.Client.WebUI.Custom.CustomHttpClient
                 url = param.fullEndpoint;
             else
                 url = $"{CreateUrl(param)}{(param.querystring != null ? $"?{param.querystring}" : "")}";
+
+            string? accessToken = _httpContextAccessor.HttpContext.User.FindFirst("AccessToken")?.Value;
+            if (!string.IsNullOrEmpty(accessToken))
+            {
+                _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+            }
 
             var jsonData = JsonConvert.SerializeObject(body);
             StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
@@ -155,8 +172,14 @@ namespace ECommerce.Client.WebUI.Custom.CustomHttpClient
             else
                 url = $"{CreateUrl(param)}{(id != null ? $"/{id}" : "")}{(param.querystring != null ? $"?{param.querystring}" : "")}";
 
-            HttpClient client = _httpClientFactory.CreateClient();
-            var responseMessage = await client.DeleteAsync(url);
+
+            string? accessToken = _httpContextAccessor.HttpContext.User.FindFirst("AccessToken")?.Value;
+            if (!string.IsNullOrEmpty(accessToken))
+            {
+                _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+            }
+           
+            var responseMessage = await _client.DeleteAsync(url);
             var response = new ResponseWrapper<string> { StatusCode = responseMessage.StatusCode };
 
             if (responseMessage.IsSuccessStatusCode)

@@ -1,5 +1,6 @@
 ﻿
 using ECommerce.Api.Application.Features.AppUsers.Commands.CreateUser;
+using ECommerce.Api.Application.Features.AppUsers.Commands.GoogleLogin;
 using ECommerce.Api.Application.Features.AppUsers.Commands.LoginUser;
 using ECommerce.Api.WebAPI.ResponseModel;
 using MediatR;
@@ -34,6 +35,20 @@ namespace ECommerce.Api.WebAPI.Controllers
         public async Task<IActionResult> Login(LoginUserCommandRequest request)
         {
             LoginUserCommandResponse response = await _mediator.Send(request);
+
+            ResponseWrapper<string> wp = new()
+            {
+                StatusCode = HttpStatusCode.OK,
+                AccessToken = response.Token.AccessToken,
+                Expiration = response.Token.Expiration,
+            };
+
+            return Ok(wp);
+        }
+        [HttpPost("[action]")]
+        public async Task<IActionResult> GoogleLogin(GoogleLoginCommandRequest request)
+        {
+            GoogleLoginCommandResponse response = await _mediator.Send(request);
 
             ResponseWrapper<string> wp = new()
             {

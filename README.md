@@ -13,3 +13,4 @@
 - Ef-Table Per Hierarchy
 - Azure Blob Storage
 - Custom Http Client Service
+- Google Login

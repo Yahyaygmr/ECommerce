@@ -9,7 +9,14 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
 
+builder.Services.AddAuthentication().AddGoogle(options =>
+{
+    options.ClientId = configuration["GoogleAuthentication:ClientId"];
+    options.ClientSecret = configuration["GoogleAuthentication:ClientSecret"];
+
+});
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
