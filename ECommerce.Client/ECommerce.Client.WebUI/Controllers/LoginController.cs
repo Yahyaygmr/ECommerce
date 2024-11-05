@@ -4,10 +4,14 @@ using ECommerce.Client.WebUI.Models.Responses;
 using ECommerce.Client.WebUI.Models.Tokens;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Security.Claims;
+using static Google.Apis.Auth.GoogleJsonWebSignature;
+
 
 namespace ECommerce.Client.WebUI.Controllers
 {
@@ -87,6 +91,27 @@ namespace ECommerce.Client.WebUI.Controllers
 
             //await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             //return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> Logingg()
+        {
+            var redirectUrl = Url.Action("GoogleCallback", "Login");
+            var properties = new AuthenticationProperties { RedirectUri = redirectUrl };
+            return Challenge(properties, GoogleDefaults.AuthenticationScheme);
+        }
+        // Google'dan dönüş ve kullanıcı bilgilerini kaydetme
+        public async Task<IActionResult> GoogleCallback()
+        {
+            var result = await HttpContext.AuthenticateAsync();
+
+            if (result?.Principal == null)
+                return RedirectToAction("Index", "Home");
+
+            // Google'dan gelen kullanıcı bilgilerini alıyoruz
+            var email = result.Principal.FindFirstValue(ClaimTypes.Email);
+            var firstName = result.Principal.FindFirstValue(ClaimTypes.GivenName);
+            var lastName = result.Principal.FindFirstValue(ClaimTypes.Surname);
+            // Ana sayfaya yönlendir
+            return RedirectToAction("Index", "Home");
         }
     }
 }
